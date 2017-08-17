@@ -53,4 +53,5 @@ NodeJS, obviously. And NPM too. Node: 6.11.X and NPM 3.10.X preferrably.
 4. Run:
         ``npm test``
    . You may need to adjust the mocha timeout time depending on your internet speed, as this will affect the response time for Jira calls.
-5. Once it's all good, make sure you setup Alexa services and AWS Lambda as explained above https://github.com/BrendanVadacoraBell/AIND-VUI-Alexa/blob/master/OLD_SPACE_GEEK_INSTRUCTIONS.md 
+5. Once it's all good, make sure you setup Alexa services and AWS Lambda as explained above https://github.com/BrendanVadacoraBell/AIND-VUI-Alexa/blob/master/OLD_SPACE_GEEK_INSTRUCTIONS.md
+6. Be sure to zip everything in src, except the test folder. This is what must be uploaded to AWS Lambda. Also, keep it lean. Once, over 10MB, Lambda suggests using S3. While that is not required, it does take longer to save the uploaded .zip file the larger it is.
