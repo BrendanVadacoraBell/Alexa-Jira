@@ -43,11 +43,14 @@ Any utility methods used in multiple places can be abstracted here.
 The obvious stuff. Would be great to include a script that creates the zip file to be uploaded to AWS Lambda, which includes everything in src except the tests.
 
 ## So, what do I need to do to get it up and running?
+
+NodeJS, obviously. And NPM too. Node: 6.11.X and NPM 3.10.X preferrably.
+
 1. Clone this project
 2. Run in src folder:
-        npm install 
+        ``npm install``
 3. Enter your credentials for Jira into credentials.json
 4. Run:
-        npm test
-   You may need to adjust the mocha timeout time depending on your internet speed, as this will affect the response time for Jira calls.
+        ``npm test``
+   . You may need to adjust the mocha timeout time depending on your internet speed, as this will affect the response time for Jira calls.
 5. Once it's all good, make sure you setup Alexa services and AWS Lambda as explained above https://github.com/BrendanVadacoraBell/AIND-VUI-Alexa/blob/master/OLD_SPACE_GEEK_INSTRUCTIONS.md 
