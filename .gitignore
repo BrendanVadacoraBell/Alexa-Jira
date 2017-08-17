@@ -3,4 +3,3 @@ npm-debug.log
 .vscode/launch.json
 src/Archive.zip
 src/node_modules/
-src/credentials.json
