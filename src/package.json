@@ -1,0 +1,32 @@
+{
+  "name": "alexa-jira-skill",
+  "version": "1.0.0",
+  "description": "An Alexa Skill that integrates with Jira.",
+  "main": "index.js",
+  "directories": {
+    "test": "test"
+  },
+  "scripts": {
+    "test": "mocha --timeout 5000"
+  },
+  "keywords": [
+    "alexa",
+    "skill"
+  ],
+  "author": "Brendan Bell: Wunderman Applogix",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "none"
+  },
+  "dependencies": {
+    "alexa-sdk": "^1.0.10",
+    "jira-client": "^6.4.0",
+    "request": "^2.81.0"
+  },
+  "devDependencies": {
+    "aws-lambda-mock-context": "3.0.1",
+    "chai": "^4.0.2",
+    "mocha": "^3.4.2"
+  }
+}
