@@ -1,17 +1,10 @@
 'use strict';
 var Alexa = require('alexa-sdk');
-
+var descriptionIntent = require('./intents/getDescriptionIntent')
 var utils = require('./utils')
 var jiraClient = require('./jiraClient')
 
 var APP_ID = undefined;  // can be replaced with your app ID if publishing
-var GET_ISSUE_DESCRIPTION_EN = [
-    "Here is the description: ",
-    "I found the description: ",
-    "Here is the issue's description: ",
-    "I will read the description to you: ",
-    "Issue description: "
-]
 var MOVE_ISSUE_EN = [
     "I have moved the issue.",
     "Jira has moved the issue.",
@@ -27,7 +20,7 @@ var LOAD_ISSUE_EN = [
     "I have loaded the ticket: "
 ]
 // Test hooks - do not remove!
-exports.GetIssueDescriptionMsg = GET_ISSUE_DESCRIPTION_EN;
+exports.GetIssueDescriptionMsg = descriptionIntent.messages;
 exports.MoveIssueMsg = MOVE_ISSUE_EN;
 exports.loadIssueMsg = LOAD_ISSUE_EN;
 var APP_ID_TEST = "mochatest";  // used for mocha tests to prevent warning
@@ -37,7 +30,7 @@ var languageStrings = {
     "en": {
         "translation": {
             "SKILL_NAME": "Jira Skill",  // OPTIONAL change this to a more descriptive name
-            "GET_ISSUE_DESCRIPTION": GET_ISSUE_DESCRIPTION_EN,
+            "GET_ISSUE_DESCRIPTION": descriptionIntent.messages,
             "MOVE_ISSUE": MOVE_ISSUE_EN,
             "LOAD_ISSUE": LOAD_ISSUE_EN,
             "HELP_MESSAGE": "You can ask me to do something with a Jira Issue, or, you can say exit... What can I help you with?",
@@ -56,7 +49,7 @@ exports.handler = function (event, context, callback) {
     }
     // To enable string internationalization (i18n) features, set a resources object.
     alexa.resources = languageStrings;
-    alexa.registerHandlers(handlers);
+    alexa.registerHandlers(handlers, descriptionIntent.handlers);
     alexa.execute();
 };
 
@@ -94,25 +87,8 @@ var handlers = {
         }
     },
     'ReadIssueDescriptionIntent': function () {
-        this.emit('ReadIssueDescription');
-    },
-    'ReadIssueDescription': function () {
-
-            //call the jira function
-            var description = jiraClient.getIssueDescription()
-
-        if(description){
-
-        
-            var speechOutput = utils.getRandomIntroMessage(GET_ISSUE_DESCRIPTION_EN) + description;
-            // Use this.t() to get corresponding language data
-            this.emit(':askWithCard', speechOutput, 'You can ask for another field or try one of my other capabilities.', this.t("SKILL_NAME"), description)
-        
-        }
-        else{ 
-            this.emit(':askWithCard', 'I did not understand that request', "Please provide a valid project key and issue number.", this.t("SKILL_NAME"), 'I did not understand that request. Please provide a valid project key and issue number.');
-        }
-        
+        //emit event for descriptionIntent.handlers
+        this.emit('ReadIssueDescription')
     },
     'MoveIssueIntent': function () {
         this.emit('MoveIssue');
