@@ -1,15 +1,18 @@
+//require libraries
 var Alexa = require('alexa-sdk');
 var utils = require('../utils')
 var jiraClient = require('../jiraClient')
 
+//messages for VUI authenticity
 var messages = [
         "Here is the description: ",
         "I found the description: ",
         "Here is the issue's description: ",
         "I will read the description to you: ",
         "Issue description: "
-    ]
+]
 
+//export messages and handlers
 module.exports = {
     'messages' : messages,
     'handlers': {
