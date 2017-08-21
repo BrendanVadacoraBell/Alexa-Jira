@@ -16,6 +16,10 @@ var messages = [
 module.exports = {
     'messages' : messages,
     'handlers': {
+        'ReadIssueDescriptionIntent': function () {
+            //emit event for descriptionIntent.handlers
+            this.emit('ReadIssueDescription')
+        },
         'ReadIssueDescription': function () {
 
             //call the jira function

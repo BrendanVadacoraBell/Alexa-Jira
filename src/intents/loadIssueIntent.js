@@ -16,6 +16,9 @@ var messages = [
 module.exports = {
     'messages' : messages,
     'handlers': {
+        'LoadIssueIntent': function() {
+            this.emit('LoadIssue')
+        },
         'LoadIssue': function() {
             // get the spoken project key and issue number
             var projectKey = this.event.request.intent.slots.PROJECT_KEY.value;

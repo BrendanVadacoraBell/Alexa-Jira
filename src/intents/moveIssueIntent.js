@@ -16,6 +16,9 @@ var messages = [
 module.exports = {
     'messages' : messages,
     'handlers': {
+        'MoveIssueIntent': function () {
+            this.emit('MoveIssue');
+        },
         'MoveIssue': function () {
             var transitionId = this.event.request.intent.slots.TRANSITION_ID.value;
     

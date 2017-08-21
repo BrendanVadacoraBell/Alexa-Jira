@@ -55,16 +55,6 @@ var handlers = {
         var speechOutput = "Welcome to the Alexa Jira skill. You can ask me to do anything that Jira can."
         this.emit(':askWithCard', speechOutput, 'Go ahead, try it out!.', this.t("SKILL_NAME"), speechOutput)
     },
-    'LoadIssueIntent': function() {
-        this.emit('LoadIssue')
-    },
-    'ReadIssueDescriptionIntent': function () {
-        //emit event for descriptionIntent.handlers
-        this.emit('ReadIssueDescription')
-    },
-    'MoveIssueIntent': function () {
-        this.emit('MoveIssue');
-    },
     'AMAZON.HelpIntent': function () {
         var speechOutput = this.t("HELP_MESSAGE");
         var reprompt = this.t("HELP_MESSAGE");
