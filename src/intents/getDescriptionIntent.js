@@ -1,10 +1,10 @@
 //require libraries
-var Alexa = require('alexa-sdk');
-var utils = require('../utils')
-var jiraClient = require('../jiraClient')
+const Alexa = require('alexa-sdk');
+const utils = require('../utils')
+const jiraClient = require('../jiraClient')
 
 //messages for VUI authenticity
-var messages = [
+const messages = [
         "Here is the description: ",
         "I found the description: ",
         "Here is the issue's description: ",
@@ -23,18 +23,25 @@ module.exports = {
         'ReadIssueDescription': function () {
 
             //call the jira function
-            var description = jiraClient.getIssueDescription()
+            try{
+                var description = jiraClient.getIssueDescription()
 
-            if(description){
+                if(description){
 
-            
-                var speechOutput = utils.getRandomIntroMessage(messages) + description;
-                // Use this.t() to get corresponding language data
-                this.emit(':askWithCard', speechOutput, 'You can ask for another field or try one of my other capabilities.', this.t("SKILL_NAME"), description)
-            
+                
+                    var speechOutput = utils.getRandomIntroMessage(messages) + description;
+                    // Use this.t() to get corresponding language data
+                    this.emit(':askWithCard', speechOutput, 'You can ask for another field or try one of my other capabilities.', this.t("SKILL_NAME"), description)
+                
+                }
+                else{ 
+                    this.emit(':askWithCard', 'I did not understand that request', "Please provide a valid project key and issue number.", this.t("SKILL_NAME"), 'I did not understand that request. Please provide a valid project key and issue number.');
+                }
             }
-            else{ 
-                this.emit(':askWithCard', 'I did not understand that request', "Please provide a valid project key and issue number.", this.t("SKILL_NAME"), 'I did not understand that request. Please provide a valid project key and issue number.');
+            catch(error){
+                var output = jiraClient.resolveError(error)
+                this.emit(':askWithCard', output.speechOutput, output.suggestion,
+                    this.t("SKILL_NAME"), output.speechOutput + output.suggestion);
             }
             
         },

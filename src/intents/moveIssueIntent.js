@@ -1,10 +1,10 @@
 //require libraries
-var Alexa = require('alexa-sdk');
-var utils = require('../utils')
-var jiraClient = require('../jiraClient')
+const Alexa = require('alexa-sdk');
+const utils = require('../utils')
+const jiraClient = require('../jiraClient')
 
 //messages for VUI authenticity
-var messages = [
+const messages = [
     "I have moved the issue.",
     "Jira has moved the issue.",
     "The issue has been moved.",
@@ -14,27 +14,39 @@ var messages = [
 
 //export messages and handlers
 module.exports = {
-    'messages' : messages,
+    'messages': messages,
     'handlers': {
         'MoveIssueIntent': function () {
             this.emit('MoveIssue');
         },
         'MoveIssue': function () {
-            var transitionId = this.event.request.intent.slots.TRANSITION_ID.value;
-    
-            if(transitionId){
-                //call the Jira api
-                var moveIssuePromise = jiraClient.moveIssue(transitionId)
+            const transitionId = this.event.request.intent.slots.TRANSITION_ID.value;
 
-                //once the promise is resolved
-                Promise.resolve(moveIssuePromise).then(result => {
-                    // Create speech output
-                    var speechOutput = utils.getRandomIntroMessage(messages);
-                    // Use this.t() to get corresponding language data
-                    this.emit(':askWithCard', speechOutput, 'You can ask for another task like you did before.', this.t("SKILL_NAME"), speechOutput)
-                })
+            if (transitionId) {
+                try{
+                    //call the Jira api
+                    jiraClient.moveIssue(transitionId)
+                        .then(result => {
+                            // Create speech output
+                            var speechOutput = utils.getRandomIntroMessage(messages);
+                            // Use this.t() to get corresponding language data
+                            this.emit(':askWithCard', speechOutput, 'You can ask for another task like you did before.', this.t("SKILL_NAME"), speechOutput)
+                        })
+                        .catch(error => {
+                            //catch the error and use the resolve error helper from jiraClient to get appropriate responses
+                            var output = jiraClient.resolveError(error)
+                            this.emit(':askWithCard', output.speechOutput, output.suggestion,
+                                this.t("SKILL_NAME"), output.speechOutput + output.suggestion);
+                        })
+                }
+                catch(error){
+                    //catch the error and use the resolve error helper from jiraClient to get appropriate responses
+                    var output = jiraClient.resolveError(error)
+                    this.emit(':askWithCard', output.speechOutput, output.suggestion,
+                        this.t("SKILL_NAME"), output.speechOutput + output.suggestion);
+                }
             }
-            else{ 
+            else {
                 this.emit(':askWithCard', 'I did not understand that request', "Please provide a transition ID.", this.t("SKILL_NAME"), 'I did not understand that request. Please provide a valid transition id.');
             }
         },

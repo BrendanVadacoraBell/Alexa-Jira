@@ -1,69 +1,94 @@
 //using this Jira NodeJS library : https://github.com/jira-node/node-jira-client
-var JiraClient = require('jira-client')
+const JiraClient = require('jira-client')
 
-var fs = require("fs");
-var credentials = JSON.parse(fs.readFileSync('./credentials.json', 'utf-8'));
-var transitions = JSON.parse(fs.readFileSync('./transitions.json', 'utf-8'));
+const fs = require("fs");
+const credentials = JSON.parse(fs.readFileSync('./credentials.json', 'utf-8'));
+const transitions = JSON.parse(fs.readFileSync('./transitions.json', 'utf-8'));
+
 //TODO: Use OAuth
-var jira = new JiraClient({
-  protocol: 'https',
-  host: credentials.domain,
-  username: credentials.username,
-  password: credentials.password,
-  apiVersion: '2',
-  strictSSL: true
+const jira = new JiraClient({
+    protocol: 'https',
+    host: credentials.domain,
+    username: credentials.username,
+    password: credentials.password,
+    apiVersion: '2',
+    strictSSL: true
 });
 
+//store the current issue
 var currentIssueResponse;
 
+//export methods
 module.exports = {
-    loadIssue: function(projectKey, issueNumber){
-        var issue = `${projectKey}-${issueNumber}`
+    loadIssue: function (projectKey, issueNumber) {
+        //return a promise of finding the issue
+        const issue = `${projectKey}-${issueNumber}`
 
         return jira.findIssue(issue, '*', '*all', '*', false)
-            .then(response => {
-                console.log(`Jira: Found Issue - ${issue}`)
-                currentIssueResponse = response
-                return true;
-            })
-            .catch(error => {
-                console.error(`Jira: Did not find Issue - ${issue}`, error)
-                return {error: error}
-            });
     },
-    getIssueDescription : function(){
-        if(currentIssueResponse){
+    getIssueDescription: function () {
+        //if the current issue is staged, return, else throw
+        if (currentIssueResponse) {
             return currentIssueResponse.fields.description;
         }
-        else{
-            return "Please Load an Issue First"
+        else {
+            throw {cause: {code : 'CISSUENOTFOUND'}}
         }
 
     },
 
-    moveIssue : function(transitionId){
-        
-        var transition = {
+    moveIssue: function (transitionId) {
+
+        //build the transition obj for request
+        const transition = {
             transition: {
                 id: transitions[transitionId]
             }
         }
 
-        if(currentIssueResponse){
+        //if the current issue is staged, continue, else throw
+        if (currentIssueResponse) {
             var issue = currentIssueResponse.id
         }
-        else{
-            return "Error"
+        else {
+            throw {cause: {code : 'CISSUENOTFOUND'}}
         }
 
+        //return a promise of transitioning the issue
         return jira.transitionIssue(issue, transition)
-            .then(response => {
-                console.log(`Jira: Transitioned Issue ${currentIssueResponse.key} with transition id ${transitionId} : ${transitions[transitionId]}`)
-                return true
-            })
-            .catch(error => {
-                console.error(`Jira: Did not transition issue ${currentIssueResponse.key} with transition id ${transitionId} : ${transitions[transitionId]}`, error)
-                return {error: error}
-            })
+    },
+
+    setCurrentResponse: function (response) {
+        //setter for current issue
+        currentIssueResponse = response
+    },
+
+    resolveError: function (error) {
+
+        /**
+         * Builds the error response in a predefined format
+         * @param {string} speech 
+         * @param {string} suggestion 
+         */
+        function buildErrorMessage(speech, suggestion){
+            return {
+                    speechOutput: speech,
+                    suggestion: suggestion
+            }
+        }
+
+        //log the error code
+        console.error("Error:", error.cause.code)
+
+        //switch on error code and build the appropriate message
+        switch (error.cause.code) {
+            case 'ENOTFOUND':
+                return buildErrorMessage("I could not connect to that server.", 
+                    "Please check that your server configuration is correct.")
+            case 'CISSUENOTFOUND':
+                return buildErrorMessage("There is no issue currently staged.",
+                    "Please stage an issue first.")
+        }
     }
+
 }
