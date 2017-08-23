@@ -76,8 +76,8 @@ module.exports = {
             throw {cause: {code : 'CISSUENOTFOUND'}}
         }
 
-        //return a promise of transitioning the issue
-        return jira.transitionIssue(issue, transition)
+        //return a promise of transitioning the issue and then getting the issue
+        return [jira.transitionIssue(issue, transition), jira.findIssue(issue, '*', '*all', '*', false)]
     },
 
     setCurrentResponse: function (response) {
@@ -99,8 +99,8 @@ module.exports = {
             }
         }
 
-        //log the error code
-        console.error("Error:", error.cause.code)
+        //log the error
+        console.error("Error:", error)
 
         //switch on error code and build the appropriate message
         switch (error.cause.code) {
