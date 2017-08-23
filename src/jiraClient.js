@@ -26,10 +26,32 @@ module.exports = {
 
         return jira.findIssue(issue, '*', '*all', '*', false)
     },
-    getIssueDescription: function () {
+    getIssueField: function (fieldKey) {
         //if the current issue is staged, return, else throw
         if (currentIssueResponse) {
-            return currentIssueResponse.fields.description;
+            const field = currentIssueResponse.fields[`${fieldKey}`];
+
+            //throw error if undefined
+            if(!field){
+                throw {cause: {code : 'FIELDNOTFOUND'}}
+            }
+
+            //if the field is an object get the displayName/name
+            if(field instanceof Object){
+                if(field.displayName){
+                    return field.displayName
+                }
+                else if(field.name){
+                    return field.name
+                }
+                else{
+                    throw {cause: {code : 'FIELDNOTFOUND'}}
+                }
+            }
+            else{
+                return field
+            }
+
         }
         else {
             throw {cause: {code : 'CISSUENOTFOUND'}}
@@ -88,6 +110,9 @@ module.exports = {
             case 'CISSUENOTFOUND':
                 return buildErrorMessage("There is no issue currently staged.",
                     "Please stage an issue first.")
+            case 'FIELDNOTFOUND':
+                return buildErrorMessage("I could not find that field.",
+                    "Please try again or specify another field.")
         }
     }
 

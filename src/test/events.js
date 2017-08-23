@@ -32,7 +32,7 @@ module.exports = {
     },
     "version": "1.0"
   },
-  "ReadIssueDescriptionIntent": {
+  "ReadIssueFieldIntent": {
     "session": {
       "sessionId": null,
       "application": {
@@ -50,7 +50,13 @@ module.exports = {
       "locale": "en-US",
       "timestamp": "2017-04-26T19:29:57Z",
       "intent": {
-        "name": "ReadIssueDescriptionIntent"
+        "name": "ReadIssueFieldIntent",
+        "slots": {
+          "FIELD_KEY": {
+            "name": "FIELD_KEY",
+            "value": "description"
+          }
+        }
       }
     },
     "version": "1.0"
