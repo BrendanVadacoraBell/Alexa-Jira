@@ -6,7 +6,8 @@
         {"name": "ISSUE_NUMBER", "type": "AMAZON.NUMBER"}]
     },
     {
-      "intent": "ReadIssueDescriptionIntent"
+      "intent": "ReadIssueFieldIntent",
+      "slots": [{"name": "FIELD_KEY", "type": "FIELD_KEY"}]
     },
     {
       "intent": "MoveIssueIntent",

@@ -13,23 +13,23 @@ LoadIssueIntent bring me issue {PROJECT_KEY} {ISSUE_NUMBER}
 LoadIssueIntent i want {PROJECT_KEY} {ISSUE_NUMBER}
 LoadIssueIntent i want ticket {PROJECT_KEY} {ISSUE_NUMBER}
 LoadIssueIntent i want issue {PROJECT_KEY} {ISSUE_NUMBER}
-ReadIssueDescriptionIntent what is the description
-ReadIssueDescriptionIntent what is that description
-ReadIssueDescriptionIntent what is its description
-ReadIssueDescriptionIntent what is the ticket's description
-ReadIssueDescriptionIntent what is the issue's description
-ReadIssueDescriptionIntent describe it
-ReadIssueDescriptionIntent describe that
-ReadIssueDescriptionIntent describe the ticket
-ReadIssueDescriptionIntent describe the issue
-ReadIssueDescriptionIntent tell me about it
-ReadIssueDescriptionIntent tell me about that
-ReadIssueDescriptionIntent tell me about the issue
-ReadIssueDescriptionIntent tell me about the ticket
-ReadIssueDescriptionIntent read the description
-ReadIssueDescriptionIntent read its description
-ReadIssueDescriptionIntent read the ticket's description
-ReadIssueDescriptionIntent read the issue's description
+ReadIssueFieldIntent what is the {FIELD_KEY}
+ReadIssueFieldIntent what is that {FIELD_KEY}
+ReadIssueFieldIntent what is its {FIELD_KEY}
+ReadIssueFieldIntent what is the ticket's {FIELD_KEY}
+ReadIssueFieldIntent what is the issue's {FIELD_KEY}
+ReadIssueFieldIntent get {FIELD_KEY}
+ReadIssueFieldIntent get its {FIELD_KEY}
+ReadIssueFieldIntent get the {FIELD_KEY}
+ReadIssueFieldIntent get the issue's {FIELD_KEY}
+ReadIssueFieldIntent tell me about {FIELD_KEY}
+ReadIssueFieldIntent tell me about {FIELD_KEY}
+ReadIssueFieldIntent tell me about the {FIELD_KEY}
+ReadIssueFieldIntent tell me about the {FIELD_KEY}
+ReadIssueFieldIntent read the {FIELD_KEY}
+ReadIssueFieldIntent read its {FIELD_KEY}
+ReadIssueFieldIntent read the ticket's {FIELD_KEY}
+ReadIssueFieldIntent read the issue's {FIELD_KEY}
 MoveIssueIntent move it to {TRANSITION_ID}
 MoveIssueIntent move that to {TRANSITION_ID}
 MoveIssueIntent move the ticket to {TRANSITION_ID}

@@ -25,8 +25,10 @@ module.exports = {
             if (transitionId) {
                 try{
                     //call the Jira api
-                    jiraClient.moveIssue(transitionId)
-                        .then(result => {
+                    Promise.all(jiraClient.moveIssue(transitionId))
+                        .then(results => {
+                            //set the response from the second promise
+                            jiraClient.setCurrentResponse(results[1])
                             // Create speech output
                             var speechOutput = utils.getRandomIntroMessage(messages);
                             // Use this.t() to get corresponding language data

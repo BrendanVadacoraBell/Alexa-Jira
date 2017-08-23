@@ -8,6 +8,8 @@ var utils = require('./utils');
 var fs = require("fs");
 var sch = JSON.parse(fs.readFileSync('../speechAssets/IntentSchema.json', 'utf-8'));
 var utterances = fs.readFileSync('../speechAssets/SampleUtterances_en_US.txt', "utf-8");
+var sampleIssueResponse = JSON.parse(fs.readFileSync('./test/sampleIssueResponse.json', 'utf-8'));
+const jira = require('../jiraClient')
 var intents = sch.intents;
 
 // https://www.thepolyglotdeveloper.com/2016/08/test-amazon-alexa-skills-offline-with-mocha-and-chai-for-node-js/
@@ -16,6 +18,10 @@ const ctx1 = context();
 const ctx2 = context();
 
 describe("Test Cases for MoveIssueIntent", function () {
+    before(function (done) {
+        jira.setCurrentResponse(sampleIssueResponse);
+        done();
+    })
     describe("Testing utterance list for MoveIssueIntent", function () {
         it('should have at least 15 utterances for MoveIssueIntent', function () {
             var count = (utterances.match(/MoveIssueIntent/g) || []).length;

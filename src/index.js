@@ -10,7 +10,7 @@ var requiredIntents = require('./intents/requiredIntents.js')
 var APP_ID = undefined;  // can be replaced with your app ID if publishing
 
 // Test hooks - do not remove!
-exports.GetIssueDescriptionMsg = requiredIntents.descriptionIntent.messages;
+exports.ReadIssueFieldMsg = requiredIntents.readFieldIntent.messages;
 exports.MoveIssueMsg = requiredIntents.moveIssueIntent.messages;
 exports.loadIssueMsg = requiredIntents.loadIssueIntent.messages;
 var APP_ID_TEST = "mochatest";  // used for mocha tests to prevent warning
@@ -20,7 +20,7 @@ var languageStrings = {
     "en": {
         "translation": {
             "SKILL_NAME": "Jira Skill",  // OPTIONAL change this to a more descriptive name
-            "GET_ISSUE_DESCRIPTION": requiredIntents.descriptionIntent.messages,
+            "GET_ISSUE_FIELD": requiredIntents.readFieldIntent.messages,
             "MOVE_ISSUE": requiredIntents.moveIssueIntent.messages,
             "LOAD_ISSUE": requiredIntents.loadIssueIntent.messages,
             "HELP_MESSAGE": "You can ask me to do something with a Jira Issue, or, you can say exit... What can I help you with?",
@@ -41,7 +41,7 @@ exports.handler = function (event, context, callback) {
     alexa.resources = languageStrings;
     //Add handlers from ./intents
     alexa.registerHandlers(handlers, 
-        requiredIntents.descriptionIntent.handlers, 
+        requiredIntents.readFieldIntent.handlers, 
         requiredIntents.moveIssueIntent.handlers,
         requiredIntents.loadIssueIntent.handlers);
     alexa.execute();
